@@ -101,9 +101,7 @@ class _LoginState extends State<Login> {
                     onTap: (){
                       Navigator.push(
                           context,
-                        MaterialPageRoute(
-                          builder: (context) => Cadastro()
-                        )
+                        MaterialPageRoute(builder: (context) => Cadastro())
                       );
                     },
                   ),

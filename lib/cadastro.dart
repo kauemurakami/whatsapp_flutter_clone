@@ -6,9 +6,43 @@ class Cadastro extends StatefulWidget {
 }
 
 class _CadastroState extends State<Cadastro> {
+
+  TextEditingController _controllerNome = TextEditingController();
+  TextEditingController _controllerEmail = TextEditingController();
+  TextEditingController _controllerSenha = TextEditingController();
+  String _mensagemErro = "";
+
+  validarCampos() {
+    String nome = _controllerNome.text;
+    String email = _controllerEmail.text;
+    String senha = _controllerSenha.text;
+
+    if(email.contains("@") && email.isNotEmpty){
+      if(nome.length >= 3 ){
+        if(senha.isNotEmpty){
+          setState(() {
+            _mensagemErro = "";
+          });
+
+        }else{
+          setState(() {
+            _mensagemErro = "Insira sua senha";
+          });
+        }
+      }else{
+        setState(() {
+          _mensagemErro = "Nome precisa ser maior que 3 caracteres";
+        });
+      }
+    }else {
+      setState(() {
+        _mensagemErro = "Preencha com um email valido";
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Cadastro"),
@@ -24,7 +58,7 @@ class _CadastroState extends State<Cadastro> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.only(bottom: 32),
+                  padding: EdgeInsets.only(bottom: 16),
                   child: Image.asset("images/usuario.png",
                     width: 200,
                     height: 150,),
@@ -32,6 +66,7 @@ class _CadastroState extends State<Cadastro> {
                 Padding(
                   padding: EdgeInsets.only(bottom: 8),
                   child: TextField(
+                    controller: _controllerEmail,
                     keyboardType: TextInputType.emailAddress,
                     style: TextStyle(
                         color: Colors.white,
@@ -41,7 +76,7 @@ class _CadastroState extends State<Cadastro> {
                       labelStyle: TextStyle(
                           color: Colors.white
                       ),
-                      contentPadding: EdgeInsets.fromLTRB(24,16, 16, 24),
+                      contentPadding: EdgeInsets.fromLTRB(16, 16, 16, 16),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),
                       ),
@@ -52,8 +87,9 @@ class _CadastroState extends State<Cadastro> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 16, bottom: 16),
+                  padding: EdgeInsets.only(top: 8, bottom: 8),
                   child: TextField(
+                    controller: _controllerNome,
                     keyboardType: TextInputType.text,
                     style: TextStyle(
                         color: Colors.white,
@@ -63,7 +99,7 @@ class _CadastroState extends State<Cadastro> {
                       labelStyle: TextStyle(
                           color: Colors.white
                       ),
-                      contentPadding: EdgeInsets.fromLTRB(24,16, 16, 24),
+                      contentPadding: EdgeInsets.fromLTRB(16, 16, 16, 16),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),
                       ),
@@ -74,8 +110,10 @@ class _CadastroState extends State<Cadastro> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 16, bottom: 16),
+                  padding: EdgeInsets.only(top: 8, bottom: 16),
                   child: TextField(
+                    obscureText: true,
+                    controller: _controllerSenha,
                     keyboardType: TextInputType.text,
                     style: TextStyle(
                         color: Colors.white,
@@ -85,7 +123,7 @@ class _CadastroState extends State<Cadastro> {
                       labelStyle: TextStyle(
                           color: Colors.white
                       ),
-                      contentPadding: EdgeInsets.fromLTRB(24,16, 16, 24),
+                      contentPadding: EdgeInsets.fromLTRB(16, 16, 16, 16),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),
                       ),
@@ -96,7 +134,7 @@ class _CadastroState extends State<Cadastro> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 16, bottom: 16),
+                  padding: EdgeInsets.only(bottom: 16),
                   child: RaisedButton(
                     child: Text(
                       "Cadastrar",
@@ -109,17 +147,23 @@ class _CadastroState extends State<Cadastro> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)
                     ),
-                    onPressed: (){
-
+                    onPressed: () {
+                      validarCampos();
                     },
                   ),
                 ),
+                Center(
+                  child: Text(
+                      _mensagemErro,
+                      style: TextStyle(
+                          color: Colors.red
+                      )),
+                )
               ],
             ),
           ),
         ),
       ),
     );
-
   }
-}
+  }
