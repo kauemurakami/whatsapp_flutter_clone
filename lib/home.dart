@@ -7,14 +7,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
-  vaiPorra(){
-    Firestore.instance
-        .collection("usuarios")
-        .document("001")
-        .setData({"nome" : "Kauaê"});
-  }
-
   @override
   Widget build(BuildContext context) {
 
