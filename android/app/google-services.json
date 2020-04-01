@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "401479555692",
+    "firebase_url": "https://wpp-flutter.firebaseio.com",
+    "project_id": "wpp-flutter",
+    "storage_bucket": "wpp-flutter.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:401479555692:android:e5f13073d09878422fd649",
+        "android_client_info": {
+          "package_name": "com.ktm.whatsappflutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "401479555692-v7dhit30r6nm5346qj7tq3aq1vd21o8j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFUVs1OF8-7jddF_LZDpyzVGZ9sCJn-OI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "401479555692-v7dhit30r6nm5346qj7tq3aq1vd21o8j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
