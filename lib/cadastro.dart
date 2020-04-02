@@ -1,4 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:whatsappflutter/home.dart';
+
+import 'Model/usuario.dart';
 
 class Cadastro extends StatefulWidget {
   @override
@@ -12,21 +16,28 @@ class _CadastroState extends State<Cadastro> {
   TextEditingController _controllerSenha = TextEditingController();
   String _mensagemErro = "";
 
-  validarCampos() {
+  _validarCampos() {
     String nome = _controllerNome.text;
     String email = _controllerEmail.text;
     String senha = _controllerSenha.text;
 
     if(email.contains("@") && email.isNotEmpty){
       if(nome.length >= 3 ){
-        if(senha.isNotEmpty){
+        if(senha.isNotEmpty && senha.length > 5){
           setState(() {
             _mensagemErro = "";
           });
 
+          Usuario usuario = Usuario();
+
+          usuario.nome = nome;
+          usuario.email = email;
+          usuario.senha = senha;
+
+          _cadastrarUsuario(usuario);
         }else{
           setState(() {
-            _mensagemErro = "Insira sua senha";
+            _mensagemErro = "Insira sua senha com mais de 5 caracteres";
           });
         }
       }else{
@@ -39,6 +50,25 @@ class _CadastroState extends State<Cadastro> {
         _mensagemErro = "Preencha com um email valido";
       });
     }
+  }
+
+  _cadastrarUsuario(Usuario usuario){
+
+    FirebaseAuth auth = FirebaseAuth.instance;
+    auth.createUserWithEmailAndPassword(
+        email: usuario.email,
+        password: usuario.senha
+    ).then((firebaseUser){
+      Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Home())
+      );
+    }).catchError((erro){
+      setState(() {
+        _mensagemErro = "Erro ao cadastrar, verifique os campos e tente novamente";
+      });
+    });
+
   }
 
   @override
@@ -148,7 +178,7 @@ class _CadastroState extends State<Cadastro> {
                         borderRadius: BorderRadius.circular(10)
                     ),
                     onPressed: () {
-                      validarCampos();
+                      _validarCampos();
                     },
                   ),
                 ),
