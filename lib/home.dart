@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:whatsappflutter/abas/contatos.dart';
 import 'package:whatsappflutter/abas/conversas.dart';
+import 'package:whatsappflutter/configuracoes.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -11,6 +12,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
 
   TabController _tabController;
+  List<String> itens = ["Configurações", "Sair"];
   String emailUsuario = "";
 
   Future _recuperarDadosUsuario() async{
@@ -23,6 +25,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
     });
   }
 
+  _deslogar(){
+    FirebaseAuth auth = FirebaseAuth.instance;
+    auth.signOut();
+  }
   @override
   void initState() {
     // TODO: implement initState
@@ -33,6 +39,22 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
         length: 2,
         vsync: this
     );
+  }
+
+  _escolhaMenuItem(String item){
+    switch(item){
+      case "Configurações" :
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Configuracoes()
+          )
+        );
+        break;
+      case "Sair" :
+        _deslogar();
+        break;
+    }
   }
 
   @override
@@ -53,6 +75,19 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
             Text("Contatos"),
           ],
         ),
+        actions: <Widget>[
+          PopupMenuButton<String>(
+              itemBuilder: (context){
+                return itens.map((String item){
+                  return PopupMenuItem<String>(
+                    value: item,
+                      child: Text(item),
+                  );
+                }).toList();
+              },
+            onSelected: _escolhaMenuItem,
+          )
+        ],
       ),
       body: TabBarView(
         controller: _tabController,
