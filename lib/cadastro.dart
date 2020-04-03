@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:whatsappflutter/home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:whatsappflutter/routes.dart';
 import 'Model/usuario.dart';
 
 class Cadastro extends StatefulWidget {
@@ -66,10 +67,8 @@ class _CadastroState extends State<Cadastro> {
       .document(firebaseUser.uid)
       .setData(usuario.toMap(usuario));
 
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => Home())
-      );
+      Navigator.pushNamedAndRemoveUntil(context, RouteGenerator.ROUTE_HOME, (_)=>false);
+
     }).catchError((erro){
       setState(() {
         _mensagemErro = "Erro ao cadastrar, verifique os campos e tente novamente";
