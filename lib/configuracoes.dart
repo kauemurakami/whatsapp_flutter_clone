@@ -1,6 +1,9 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Configuracoes extends StatefulWidget {
   @override
@@ -11,7 +14,10 @@ class _ConfiguracoesState extends State<Configuracoes> {
 
   TextEditingController _controllerNome = TextEditingController();
   File _imagem;
-
+  String _idUsuario;
+  bool _uploadImg = false;
+  String _urlImgRecuperada;
+  
   Future _recuperarImagem(String origemDaImagem) async{
 
     File imagemSelecionada;
@@ -27,7 +33,60 @@ class _ConfiguracoesState extends State<Configuracoes> {
 
     setState(() {
       _imagem = imagemSelecionada;
+      if(_imagem != null){
+        _uploadImg = true;
+        _uploadImagem();
+      }
     });
+  }
+
+  Future _uploadImagem(){
+    FirebaseStorage storage = FirebaseStorage.instance;
+    StorageReference raiz = storage.ref();
+    StorageReference arquivo = raiz
+    .child("perfil")
+    .child(_idUsuario+".jpg");
+
+    StorageUploadTask task = arquivo.putFile(_imagem);
+
+    task.events.listen((StorageTaskEvent storageEvent){
+      if(storageEvent.type == StorageTaskEventType.progress){
+        setState(() {
+          _uploadImg = true;
+        });
+      }else if(storageEvent.type == StorageTaskEventType.success){
+        setState(() {
+          _uploadImg = false;
+        });
+      }
+    });
+
+    task.onComplete.then((StorageTaskSnapshot snapshot){
+      _urlImg(snapshot);
+
+    });
+
+  }
+
+  Future _urlImg(StorageTaskSnapshot snapshot) async{
+    String url = await snapshot.ref.getDownloadURL();
+    setState(() {
+      _urlImgRecuperada = url;
+    });
+    
+  }
+
+  _recuperaDadosUsuario() async{
+    FirebaseAuth auth = FirebaseAuth.instance;
+    FirebaseUser usuarioLogado = await auth.currentUser();
+    _idUsuario = usuarioLogado.uid;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _recuperaDadosUsuario();
   }
 
   @override
@@ -40,10 +99,11 @@ class _ConfiguracoesState extends State<Configuracoes> {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
+                _uploadImg ? CircularProgressIndicator() : Container(),
                 CircleAvatar(
                   radius: 100,
                   backgroundColor: Colors.grey,
-                  backgroundImage: NetworkImage("https://firebasestorage.googleapis.com/v0/b/wpp-flutter.appspot.com/o/perfil%2Fuser.png?alt=media&token=139454e9-5df3-4097-8b5c-d7f4487d52e7"),
+                  backgroundImage: _urlImgRecuperada != null ? NetworkImage(_urlImgRecuperada) : null
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
