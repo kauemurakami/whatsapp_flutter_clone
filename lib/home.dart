@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:whatsappflutter/abas/contatos.dart';
 import 'package:whatsappflutter/abas/conversas.dart';
-import 'package:whatsappflutter/configuracoes.dart';
+import 'package:whatsappflutter/routes.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -28,6 +28,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
   _deslogar(){
     FirebaseAuth auth = FirebaseAuth.instance;
     auth.signOut();
+    Navigator.pushReplacementNamed(context, RouteGenerator.ROUTE_SIGNIN);
   }
   @override
   void initState() {
@@ -44,12 +45,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
   _escolhaMenuItem(String item){
     switch(item){
       case "Configurações" :
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => Configuracoes()
-          )
-        );
+        Navigator.pushNamed(context, RouteGenerator.ROUTE_CONFIGURACOES);
         break;
       case "Sair" :
         _deslogar();

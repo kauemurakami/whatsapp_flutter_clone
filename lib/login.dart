@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:whatsappflutter/cadastro.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:whatsappflutter/routes.dart';
 import 'Model/usuario.dart';
-import 'home.dart';
 
 class Login extends StatefulWidget {
   @override
