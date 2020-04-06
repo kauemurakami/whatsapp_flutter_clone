@@ -67,19 +67,51 @@ class _ConfiguracoesState extends State<Configuracoes> {
     });
 
   }
-
+  //recuperando url imagem
   Future _urlImg(StorageTaskSnapshot snapshot) async{
     String url = await snapshot.ref.getDownloadURL();
+    _atualizarImagemFirestore(url);
     setState(() {
       _urlImgRecuperada = url;
     });
     
+  }
+  _atualizarNomeFirestore(String nome){
+    Firestore db = Firestore.instance;
+
+    Map<String, dynamic> dadosAtualizar = {
+      "nome" : nome
+    };
+    db.collection("usuarios")
+    .document(_idUsuario)
+    .updateData(dadosAtualizar);
+  }
+
+  _atualizarImagemFirestore(String url){
+    Firestore db = Firestore.instance;
+
+    Map<String, dynamic> dadosAtualizar = {
+      "urlImagem" : url
+    };
+    db.collection("usuarios")
+        .document(_idUsuario)
+        .updateData(dadosAtualizar);
   }
 
   _recuperaDadosUsuario() async{
     FirebaseAuth auth = FirebaseAuth.instance;
     FirebaseUser usuarioLogado = await auth.currentUser();
     _idUsuario = usuarioLogado.uid;
+
+    Firestore db = Firestore.instance;
+    DocumentSnapshot snapshot = await db.collection("usuarios").document(_idUsuario).get();
+
+    Map<String, dynamic> dados = snapshot.data;
+    _controllerNome.text = dados["nome"];
+
+    if(dados["urlImagem"] != null ){
+      _urlImgRecuperada = dados["urlImagem"];
+    }
   }
 
   @override
@@ -99,7 +131,10 @@ class _ConfiguracoesState extends State<Configuracoes> {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                _uploadImg ? CircularProgressIndicator() : Container(),
+                Container(
+                  padding: EdgeInsets.all(16),
+                  child: _uploadImg ? CircularProgressIndicator() : Container(),
+                ),
                 CircleAvatar(
                   radius: 100,
                   backgroundColor: Colors.grey,
@@ -126,6 +161,9 @@ class _ConfiguracoesState extends State<Configuracoes> {
                   padding: EdgeInsets.only(top: 8, bottom: 8),
                   child: TextField(
                     controller: _controllerNome,
+                    onChanged: (texto){
+                      _atualizarNomeFirestore(texto);
+                    },
                     keyboardType: TextInputType.text,
                     style: TextStyle(
                         color: Colors.black,
@@ -160,7 +198,7 @@ class _ConfiguracoesState extends State<Configuracoes> {
                         borderRadius: BorderRadius.circular(10)
                     ),
                     onPressed: () {
-
+                      _atualizarNomeFirestore(_controllerNome.text);
                     },
                   ),
                 ),

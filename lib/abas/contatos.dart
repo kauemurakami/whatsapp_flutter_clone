@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:whatsappflutter/Model/conversa.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:whatsappflutter/Model/usuario.dart';
 
 class AbaContatos extends StatefulWidget {
   @override
@@ -31,28 +33,57 @@ class _AbaContatosState extends State<AbaContatos> {
     )
   ];
 
+  Future<List<Usuario>> _recuperaContatos() async{
+
+    Firestore db = Firestore.instance;
+    QuerySnapshot snapshot = await db.collection("usaurios")
+    .getDocuments();
+
+    List<Usuario> usuarios = List();
+    for(DocumentSnapshot item in snapshot.documents){
+      var dados = item.data;
+      Usuario usuario = Usuario();
+      usuario.email = dados["email"];
+      usuario.nome = dados["nome"];
+      usuario.urlImagem = dados["urlImagem"];
+
+      usuarios.add(usuario);
+    }
+    return usuarios;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: conversas.length,
-      itemBuilder: (context, index){
-        Conversa conversa = conversas[index];
-        return ListTile(
-          contentPadding: EdgeInsets.fromLTRB(16, 8, 8, 16),
-          leading: CircleAvatar(
-            maxRadius: 30,
-            backgroundColor: Colors.grey,
-            backgroundImage: NetworkImage(conversa.caminhoFoto),
-          ),
-          title: Text(
-            conversa.nome,
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16
-            ),
-          ),
-        );
+    return FutureBuilder<List<Usuario>>(
+      future: _recuperaContatos(),
+      builder: (context, snapshot){
+        switch(snapshot.connectionState){
+          case ConnectionState.none:
+          case ConnectionState.waiting:
+            return Center(
+              child: Column(
+                children: <Widget>[
+                  Text("Carregando"),
+                  CircularProgressIndicator()
+                ],
+              ),
+            );
+            break;
+          case ConnectionState.active:
+          case ConnectionState.done:
+            ListView.builder(
+              itemCount: snapshot.data.length,
+              itemBuilder: (context, index){
+                List<Usuario> listaItens = snapshot.data;
+                Usuario usuario = listaItens[index];
+                return ListTile(
+
+                );
+              },
+
+            );
+            break;
+        }
       },
     );
-  }
 }
