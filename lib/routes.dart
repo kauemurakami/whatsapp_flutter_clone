@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:whatsappflutter/Model/conversa.dart';
 import 'package:whatsappflutter/cadastro.dart';
 import 'package:whatsappflutter/configuracoes.dart';
 import 'package:whatsappflutter/login.dart';
 import 'home.dart';
+import 'mensagens.dart';
 
 class RouteGenerator{
 
@@ -11,6 +13,7 @@ class RouteGenerator{
   static const String ROUTE_CONFIGURACOES = "/configuracoes";
   static const String ROUTE_SIGNUP = "/signup";
   static const String ROUTE_SIGNIN = "/login";
+  static const String ROUTE_CONVERSA = "/conversa";
 
   static Route<dynamic> generateRoute(RouteSettings settings){
 
@@ -40,7 +43,10 @@ class RouteGenerator{
         return MaterialPageRoute(
             builder: (_) => Configuracoes()
         );
-
+      case ROUTE_CONVERSA:
+        return MaterialPageRoute(
+            builder: (_) => Mensagem(settings.arguments)
+        );
         default:
           _erroRota();
 

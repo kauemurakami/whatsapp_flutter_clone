@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:whatsappflutter/Model/usuario.dart';
+import 'package:whatsappflutter/routes.dart';
 
 class AbaContatos extends StatefulWidget {
   @override
@@ -77,6 +78,13 @@ class _AbaContatosState extends State<AbaContatos> {
                   Usuario usuario = listaItens[indice];
 
                   return ListTile(
+                    onTap: (){
+                      Navigator.pushNamed(
+                          context,
+                          RouteGenerator.ROUTE_CONVERSA,
+                        arguments: usuario
+                      );
+                    },
                     contentPadding: EdgeInsets.fromLTRB(16, 8, 16, 8),
                     leading: CircleAvatar(
                         maxRadius: 30,
@@ -93,6 +101,7 @@ class _AbaContatosState extends State<AbaContatos> {
                 });
             break;
         }
+        return Container();
       },
     );
   }
