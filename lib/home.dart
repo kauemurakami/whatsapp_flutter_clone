@@ -15,6 +15,19 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
   List<String> itens = ["Configurações", "Sair"];
   String emailUsuario = "";
 
+
+  Future _verificaUsuarioLogado() async{
+    FirebaseAuth auth = FirebaseAuth.instance;
+
+    FirebaseUser usuarioLogado = await auth.currentUser();
+
+    if( usuarioLogado == null ){
+
+      Navigator.pushReplacementNamed(context, RouteGenerator.ROUTE_SIGNIN);
+
+    }
+  }
+
   Future _recuperarDadosUsuario() async{
 
     FirebaseAuth auth = FirebaseAuth.instance;
@@ -34,6 +47,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin{
   void initState() {
     // TODO: implement initState
     super.initState();
+    _verificaUsuarioLogado();
     _recuperarDadosUsuario();
 
     _tabController = TabController(
