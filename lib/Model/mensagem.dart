@@ -1,58 +1,51 @@
-import 'package:flutter/material.dart';
 
-class Mensagem{
+class Mensagem {
 
   String _idUsuario;
   String _mensagem;
-  String _urlImagemMensagem;
+  String _urlImagem;
 
-  //define o tipo da mensagem texto ou imagem
+  //Define o tipo da mensagem, que pode ser "texto" ou "imagem"
   String _tipo;
-
 
   Mensagem();
 
-
   Map<String, dynamic> toMap(){
-    Map<String,dynamic> map = {
-      "idUsuario" : this._idUsuario,
-      "mensagem" : this._mensagem,
-      "urlImagem" : this._urlImagemMensagem,
-      "tipo" : this._tipo
+
+    Map<String, dynamic> map = {
+      "idUsuario" : this.idUsuario,
+      "mensagem" : this.mensagem,
+      "urlImagem" : this.urlImagem,
+      "tipo" : this.tipo,
     };
 
     return map;
+
   }
 
-  @protected
   String get tipo => _tipo;
 
-  @protected
   set tipo(String value) {
     _tipo = value;
   }
 
-  @protected
-  String get urlImagemMensagem => _urlImagemMensagem;
+  String get urlImagem => _urlImagem;
 
-  @protected
-  set urlImagemMensagem(String value) {
-    _urlImagemMensagem = value;
+  set urlImagem(String value) {
+    _urlImagem = value;
   }
 
-  @protected
   String get mensagem => _mensagem;
 
-  @protected
   set mensagem(String value) {
     _mensagem = value;
   }
 
-  @protected
   String get idUsuario => _idUsuario;
 
-  @protected
   set idUsuario(String value) {
     _idUsuario = value;
   }
+
+
 }

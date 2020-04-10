@@ -64,7 +64,7 @@ class _CadastroState extends State<Cadastro> {
       Firestore db = Firestore.instance;
       db.collection("usuarios")
       .document(firebaseUser.uid)
-      .setData(usuario.toMap(usuario));
+      .setData(usuario.toMap());
 
       Navigator.pushNamedAndRemoveUntil(context, RouteGenerator.ROUTE_HOME, (_)=>false);
 

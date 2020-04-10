@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:whatsappflutter/Model/usuario.dart';
-import 'package:whatsappflutter/routes.dart';
 
 class AbaContatos extends StatefulWidget {
   @override
@@ -18,7 +17,7 @@ class _AbaContatosState extends State<AbaContatos> {
     Firestore db = Firestore.instance;
 
     QuerySnapshot querySnapshot =
-        await db.collection("usuarios").getDocuments();
+    await db.collection("usuarios").getDocuments();
 
     List<Usuario> listaUsuarios = List();
     for (DocumentSnapshot item in querySnapshot.documents) {
@@ -27,7 +26,7 @@ class _AbaContatosState extends State<AbaContatos> {
       if( dados["email"] == _emailUsuarioLogado ) continue;
 
       Usuario usuario = Usuario();
-      usuario.id = item.documentID;
+      usuario.idUsuario = item.documentID;
       usuario.email = dados["email"];
       usuario.nome = dados["nome"];
       usuario.urlImagem = dados["urlImagem"];
@@ -75,6 +74,7 @@ class _AbaContatosState extends State<AbaContatos> {
             return ListView.builder(
                 itemCount: snapshot.data.length,
                 itemBuilder: (_, indice) {
+
                   List<Usuario> listaItens = snapshot.data;
                   Usuario usuario = listaItens[indice];
 
@@ -82,8 +82,8 @@ class _AbaContatosState extends State<AbaContatos> {
                     onTap: (){
                       Navigator.pushNamed(
                           context,
-                          RouteGenerator.ROUTE_CONVERSA,
-                        arguments: usuario
+                          "/mensagens",
+                          arguments: usuario
                       );
                     },
                     contentPadding: EdgeInsets.fromLTRB(16, 8, 16, 8),
@@ -96,13 +96,12 @@ class _AbaContatosState extends State<AbaContatos> {
                     title: Text(
                       usuario.nome,
                       style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                   );
                 });
             break;
         }
-        return Container();
       },
     );
   }

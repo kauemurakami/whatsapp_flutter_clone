@@ -1,57 +1,55 @@
-import 'package:flutter/material.dart';
 
-class Usuario{
+class Usuario {
 
-   String _id;
+   String _idUsuario;
    String _nome;
    String _email;
-   String _senha;
    String _urlImagem;
+   String _senha;
 
-   Map<String, dynamic> toMap(usaurio){
-      Map<String,dynamic> map = {
-        "nome" : this.nome,
-        "email" : this.email,
+   Usuario();
+
+   Map<String, dynamic> toMap(){
+
+      Map<String, dynamic> map = {
+         "nome" : this.nome,
+         "email" : this.email
       };
 
       return map;
+
    }
 
-   @protected
-   String get id => _id;
 
-   @protected
-   set id(String value) {
-      _id = value;
-   }
-   @protected
-   String get nome => _nome;
+   String get idUsuario => _idUsuario;
 
-   @protected
-   set nome(String value) {
-     _nome = value;
+   set idUsuario(String value) {
+      _idUsuario = value;
    }
 
-   @protected
-   String get email => _email;
-
-   @protected
-   String get urlImagem => _urlImagem;
-
-   @protected
-   set urlImagem(String value) {
-     _urlImagem = value;
-   }
-   @protected
    String get senha => _senha;
 
-   @protected
    set senha(String value) {
-     _senha = value;
+      _senha = value;
    }
-   @protected
+
+   String get urlImagem => _urlImagem;
+
+   set urlImagem(String value) {
+      _urlImagem = value;
+   }
+
+   String get email => _email;
+
    set email(String value) {
-     _email = value;
+      _email = value;
    }
+
+   String get nome => _nome;
+
+   set nome(String value) {
+      _nome = value;
+   }
+
 
 }
