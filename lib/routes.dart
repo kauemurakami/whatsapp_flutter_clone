@@ -45,7 +45,7 @@ class RouteGenerator{
         );
       case ROUTE_CONVERSA:
         return MaterialPageRoute(
-            builder: (_) => Mensagem(settings.arguments)
+            builder: (_) => Mensagens(settings.arguments)
         );
         default:
           _erroRota();

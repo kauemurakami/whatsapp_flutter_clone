@@ -1,8 +1,8 @@
-
-
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class Usuario{
+
+   String _id;
    String _nome;
    String _email;
    String _senha;
@@ -15,6 +15,14 @@ class Usuario{
       };
 
       return map;
+   }
+
+   @protected
+   String get id => _id;
+
+   @protected
+   set id(String value) {
+      _id = value;
    }
    @protected
    String get nome => _nome;

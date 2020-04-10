@@ -1,30 +1,70 @@
-import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import 'Model/mensagem.dart';
 import 'Model/usuario.dart';
 
-class Mensagem extends StatefulWidget {
+class Mensagens extends StatefulWidget {
 
   Usuario contato;
 
-  Mensagem(this.contato);
+  Mensagens(this.contato);
 
   @override
-  _MensagemState createState() => _MensagemState();
+  _MensagensState createState() => _MensagensState();
 }
 
-class _MensagemState extends State<Mensagem> {
+class _MensagensState extends State<Mensagens> {
+
+  TextEditingController _controllerMensagem = TextEditingController();
+  String _idUsuarioLogado;
+  String _idUsuarioDestinatario;
+
+  _recuperaDadosUsuario() async{
+    FirebaseAuth auth = FirebaseAuth.instance;
+    FirebaseUser usuarioLogado = await auth.currentUser();
+    _idUsuarioLogado = usuarioLogado.uid;
+    _idUsuarioDestinatario = widget.contato.id;
+  }
+
+  _salvarMensagem(String idRemetente, String idDestinatario, Mensagem mensagem) async{
+
+    Firestore db = Firestore.instance;
+    await db.collection("mensagens")
+    .document(idRemetente)
+    .collection(idDestinatario)
+    .add(mensagem.toMap());
+
+    _controllerMensagem.clear();
+  }
+  _enviarFoto(){
+
+  }
+  _enviarMensagem(){
+
+    String textoMensagem = _controllerMensagem.text;
+    if(textoMensagem.isNotEmpty){
+
+      Mensagem mensagem = Mensagem();
+      mensagem.idUsuario = _idUsuarioLogado;
+      mensagem.mensagem = textoMensagem;
+      mensagem.tipo = "texto";
+      mensagem.urlImagemMensagem = "";
+
+      _salvarMensagem(_idUsuarioLogado, _idUsuarioDestinatario, mensagem);
+
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _recuperaDadosUsuario();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
 
-    _enviarFoto(){
-
-    }
-    _enviarMensagem(){
-
-    }
-
-    TextEditingController _controllerMensagem = TextEditingController();
     List<String> listaMensagens = [
       "oi",
       "oooolaaa",
