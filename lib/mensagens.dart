@@ -25,6 +25,47 @@ class _MensagemState extends State<Mensagem> {
     }
 
     TextEditingController _controllerMensagem = TextEditingController();
+    List<String> listaMensagens = [
+      "oi",
+      "oooolaaa",
+      "tudo bem ?",
+      "sim simsim efwfwf",
+    ];
+    var listView = Expanded(
+      child: ListView.builder(
+          itemBuilder: (context, index){
+            double larguraContainer = MediaQuery.of(context).size.width * 0.80;
+            //definir cores e alinhamentos
+            Alignment alinhamento = Alignment.centerRight;
+            Color cor = Color(0xffd2ffa5);
+            if(index % 2 == 0){
+              cor = Colors.white;
+              alinhamento = Alignment.centerLeft;
+            }
+            return Align(
+              alignment: alinhamento,
+              child: Padding(
+                padding: EdgeInsets.all(6),
+                child: Container(
+                  width: larguraContainer,
+                  padding: EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: cor,
+                    borderRadius: BorderRadius.all(Radius.circular(8))
+                  ),
+                  child: Text(
+                      listaMensagens[index],
+                    style: TextStyle(
+                      fontSize: 16
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+        itemCount: listaMensagens.length,
+      ),
+    );
 
     var caixaMensagem = Container(
       padding: EdgeInsets.all(8),
@@ -79,7 +120,7 @@ class _MensagemState extends State<Mensagem> {
             padding: EdgeInsets.all(16),
             child: Column(
               children: <Widget>[
-                Text("x"),
+                listView,
                 caixaMensagem,
               ],
             ),
